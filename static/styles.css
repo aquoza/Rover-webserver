@@ -1,43 +1,125 @@
+@font-face {
+  font-family:"Sansation";
+  src: url(fonts/sansation/Sansation_Regular.ttf);
+}
+
 body {
-    font-family: Arial, sans-serif;
-    margin: 20px;
-    background: #f4f4f4;
-    color: #333;
-    text-align: center;
+  font-size: 13pt;
+  font-family: 'Sansation';
+  background-color: rgba(255,245,214,1);
+  /* margin-left: 30px; */
+  margin: 30px;
 }
 
-#keypress-display {
-    margin-top: 20px;
-    padding: 10px;
-    background: #fff;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    width: 90%;
-    max-width: 400px;
-    margin-left: auto;
-    margin-right: auto;
+.top{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-bottom: 30px;
 }
 
-#virtual-keyboard {
-    margin-top: 20px;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-    max-width: 300px;
-    margin-left: auto;
-    margin-right: auto;
+.left{
+  flex: 1;
+  margin-right: 30px;
+}
+.status1{
+  display: flex;
+  flex-direction: row;
+  /* justify-content: space-between; */
 }
 
-#virtual-keyboard button {
-    padding: 20px;
-    font-size: 18px;
-    border: none;
-    border-radius: 5px;
-    background: #007bff;
-    color: white;
-    cursor: pointer;
+.status{
+  background: rgba(184,245,146,1);
+  /*width: 200px;*/
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50px;
+  margin-bottom: 5px;
 }
 
-#virtual-keyboard button:hover {
-    background: #0056b3;
+.status.gamepad{
+  margin-right: 5px;
+}
+.status.drone{
+  margin-right: 5px;
+  background: #F4F077;
+}
+
+.status.arm{
+  background:  #FB8773;
+}
+
+
+.mode{
+  background-color: lightblue;
+  display: flex;
+  align-items: center;  /* Center vertically */
+  justify-content: center;  /* Center horizontally */
+  height: 170px;
+  position: relative;
+}
+
+.mode_value{
+  font-size: 20pt;
+}
+
+.gamepad-values{
+  display: flex;
+  /* align-items: center; */
+  justify-content: center;  /* Center horizontally */
+}
+
+.controls{
+  margin-top: 30px;
+}
+
+.controller-image{
+  height: 400px;
+  background: url("../static/images/controller.png");
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: contain;
+  opacity: 1;
+}
+
+.container{
+  display: flex;
+  flex-direction: column;
+  flex: 2;
+  height: 700px;
+  /* margin: auto; */
+}
+.tab {
+  padding: 10px 20px;
+  background: #FFDFAC;
+  color: black;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  font-family: "Sansation";
+}
+.tab.active{
+  background: #FFD899;
+}
+.tab-content{
+  flex :1;
+  display: none;
+  padding: 2rem;
+  background-color: #FFD899;
+  animation: fadeIn 0.2s
+}
+
+.tab-content.active{
+  display: block;
+}
+
+@keyframes fadeIn {
+  from{
+      opacity:0;
+  }
+  to{
+      opacity:1;
+  }
 }

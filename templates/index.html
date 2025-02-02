@@ -1,23 +1,84 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <title>Rover Control</title>
-    <link rel="stylesheet" href="/static/styles.css">
-</head>
-<body>
-    <h1>Rover Control</h1>
-    <p>Use the virtual keyboard below to send data to the server.</p>
-    <div id="keypress-display">Waiting for input...</div>
 
-    <!-- Virtual Keyboard -->
-    <div id="virtual-keyboard">
-        <button data-key="W">W</button>
-        <button data-key="A">A</button>
-        <button data-key="S">S</button>
-        <button data-key="D">D</button>
-        <button data-key="Space">Space</button>
+<head>
+<!--    <link href="https://fonts.googleapis.com/css?family=Sansation&display=swap" rel="stylesheet" />-->
+    <link href="../static/styles.css" rel="stylesheet" />
+    <title>Document</title>
+    <!-- <link rel="stylesheet" href="../static/scripts.js"> -->
+</head>
+
+<body>
+    <div class = "top">
+        <div>
+            <span style="font-size: 38.26pt;">Dashboard </span>
+            <span style="font-size: 11pt;">192.168.0.1</span>
+        </div>
+        <span>Help</span>
     </div>
 
-    <script src="/static/scripts.js"></script>
+    <div style="display: flex;flex-direction: row;">
+        <div class="left">
+            <div class="status1">
+                <div class="status gamepad">
+                    Gamepad connected
+                </div>
+                <div class="status thermal-camera">
+                    Thermal camera connected
+                </div>
+            </div>
+            <div class="status1">
+                <div class="status drone">
+                    Drone connecting
+                </div>
+                <div class="status arm">
+                    Arm not found
+                </div>
+            </div>
+            <div class = "mode">
+                <span style="    position: absolute;
+                                    top: 5px;
+                                    left: 5px;">
+                                    Mode</span>
+                <div class="mode_value">Rover:Ackerman</div>
+            </div>
+            <span class="gamepad-values">0, 0, 0, 0, 0, 0, 0, 0, 0</span>
+            <div class="controls">
+                <span>Controls:</span>
+                <div class="controller-image"></div>
+            </div>
+        </div>
+
+        <div class = "container">
+            <div class = "tabs">
+                <button class="tab active" data-tab="tab1">
+                    Thermal Camera
+                </button>
+                <button class="tab" data-tab="tab2">
+                    Drone
+                </button>
+                <button class="tab" data-tab="tab3">
+                    Arm
+                </button>
+            </div>
+        
+            <div id="tab1" class = "tab-content active">
+                <h1>Tab1 content</h1>
+        
+            </div>
+            <div id="tab2" class = "tab-content">
+                <h1>Tab2 content</h1>
+                lorem ipsum
+            </div>
+            <div id="tab3" class = "tab-content">
+                <h1>Tab3 content</h1>
+                lorem ipsum
+            </div>
+        </div>
+    </div>
+    <script src="../static/scripts.js"></script>
+
+
 </body>
+
 </html>

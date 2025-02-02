@@ -1,27 +1,19 @@
-// Connect to WebSocket
-const ws = new WebSocket('ws://' + window.location.host + '/ws');
-const keypressDisplay = document.getElementById('keypress-display');
+document.addEventListener("DOMContentLoaded",initTabs);
 
-// Handle WebSocket connection
-ws.onopen = () => {
-    console.log('WebSocket connection established');
-};
+function initTabs(){
+    const tabs = document.querySelectorAll(".tab");
+    const contents = document.querySelectorAll(".tab-content")
 
-// Handle incoming messages from the server
-ws.onmessage = (event) => {
-    keypressDisplay.textContent = `Server response: ${event.data}`;
-};
+    tabs.forEach(function(tab){
+        tab.addEventListener("click", function (){
+            const content = document.getElementById(this.dataset.tab);
+            tabs.forEach(tab => tab.classList.remove('active'));
 
-// Handle virtual keyboard clicks
-const virtualKeyboard = document.getElementById('virtual-keyboard');
-virtualKeyboard.addEventListener('click', (event) => {
-    if (event.target.tagName === 'BUTTON') {
-        const key = event.target.getAttribute('data-key'); // Get the key from the button
-        keypressDisplay.textContent = `Key pressed: ${key}`;
+            contents.forEach(content=>content.classList.remove('active'));
 
-        // Send the keypress data to the server
-        if (ws.readyState === WebSocket.OPEN) {
-            ws.send(key);
-        }
-    }
-});
+            content.classList.add("active");
+            this.classList.add("active");
+
+        });
+    });
+}
