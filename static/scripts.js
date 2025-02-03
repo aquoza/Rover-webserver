@@ -18,48 +18,50 @@ function initTabs(){
     });
 }
 
-// const ws = new WebSocket('ws://YOUR_RPI_IP:8000/ws/gamepad');
-// let gamepadIndex = null;
-// let isRunning = false;
+const ws = new WebSocket('ws://127.0.0.1:8000/ws/gamepad');
+let gamepadIndex = null;
+let intervalId = null;
 
-// // Gamepad connection handler
-// window.addEventListener('gamepadconnected', (e) => {
-//     gamepadIndex = e.gamepad.index;
-//     document.getElementById('gamepad-status').textContent = 
-//         `Gamepad Connected: ${e.gamepad.id}`;
-//     if (!isRunning) pollGamepad();
-// });
+// Gamepad connection handler
+window.addEventListener('gamepadconnected', (e) => {
+    gamepadIndex = e.gamepad.index;
+    document.getElementById('gamepad-status').textContent = 
+        `Gamepad Connected`;
+    document.getElementById('gamepad-status').style.backgroundColor = "#b8f592";
+    intervalId = setInterval(pollGamepad, 100);
+});
 
-// // Gamepad disconnection handler
-// window.addEventListener('gamepaddisconnected', (e) => {
-//     document.getElementById('gamepad-status').textContent = 
-//         'Gamepad Disconnected';
-//     gamepadIndex = null;
-//     isRunning = false;
-// });
+// Gamepad disconnection handler
+window.addEventListener('gamepaddisconnected', (e) => {
+    document.getElementById('gamepad-status').textContent = 
+        'Gamepad Disconnected';
+    document.getElementById('gamepad-status').style.backgroundColor = "#FB8773";
+    gamepadIndex = null;
+    clearInterval(intervalId); // Stop the interval
+});
 
-// // Gamepad polling loop
-// function pollGamepad() {
-//     isRunning = true;
-//     const gamepad = navigator.getGamepads()[gamepadIndex];
+// Gamepad polling loop
+function pollGamepad() {
+    isRunning = true;
+    const gamepad = navigator.getGamepads()[gamepadIndex];
+    if (!gamepad) return;
     
-//     if (gamepad && ws.readyState === WebSocket.OPEN) {
-//         // Prepare gamepad data
-//         const data = {
-//             axes: Array.from(gamepad.axes),
-//             buttons: Array.from(gamepad.buttons).map(b => b.value),
-//             timestamp: Date.now()
-//         };
+    if (gamepad && ws.readyState === WebSocket.OPEN) {
+        // Prepare gamepad data
+        const data = {
+            axes: Array.from(gamepad.axes),
+            buttons: Array.from(gamepad.buttons).map(b => b.value),
+            timestamp: Date.now()
+        };
         
-//         // Send via WebSocket
-//         ws.send(JSON.stringify(data));
-//     }
+        if (ws.readyState === WebSocket.OPEN) {
+            ws.send(JSON.stringify(data));
+        }
+    }
     
-//     // Continue polling
-//     if (isRunning) requestAnimationFrame(pollGamepad);
-// }
+}
 
-// // WebSocket connection handlers
-// ws.onopen = () => {
-//     console.log('WebSocket connection established');
-// };
+// WebSocket connection handlers
+ws.onopen = () => {
+    console.log('WebSocket connection established');
+};
