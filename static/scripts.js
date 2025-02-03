@@ -18,7 +18,7 @@ function initTabs(){
     });
 }
 
-const ws = new WebSocket('ws://127.0.0.1:8000/ws/gamepad');
+const ws = new WebSocket('ws://10.167.200.2:8000/ws/gamepad');
 let gamepadIndex = null;
 let intervalId = null;
 
