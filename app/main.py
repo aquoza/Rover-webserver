@@ -14,7 +14,7 @@ async def gamepad_websocket(websocket: WebSocket):
         while True:
             # Receive gamepad data from the client
             data = await websocket.receive_json()
-            print(f"Gamepad Data: {data}")  # Process this data as needed
+            # print(f"Gamepad Data: {data}")  # Process this data as needed
             
             # Optional: Send acknowledgment back
             await websocket.send_json({"status": "received"})
