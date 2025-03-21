@@ -39,7 +39,6 @@ window.addEventListener('gamepaddisconnected', (e) => {
     gamepadIndex = null;
     clearInterval(intervalId); // Stop the interval
 });
-
 // Gamepad polling loop
 function pollGamepad() {
     isRunning = true;
@@ -64,4 +63,5 @@ function pollGamepad() {
 // WebSocket connection handlers
 ws.onopen = () => {
     console.log('WebSocket connection established');
+    console.log('hi');
 };
