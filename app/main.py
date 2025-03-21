@@ -41,7 +41,7 @@ async def broadcast_to_gamepad(data):
         for client in gamepad_clients:
             try:
                 await client.send_json(data)
-                print(f"Forwarded data to Gamepad client: {data}")
+                # print(f"Forwarded data to Gamepad client: {data}")
             except Exception as e:
                 print(f"Error sending data to Gamepad client: {e}")
 
