@@ -20,7 +20,7 @@ async def gamepad_websocket(websocket: WebSocket):
             # Receive gamepad data from the client
             data = await websocket.receive_json()
             await broadcast_to_gamepad(data)
-            print(f"Gamepad Data: {data}")  # Process this data as needed
+            # print(f"Gamepad Data: {data}")  # Process this data as needed
             # await websocket.send_json({"axes": [0.0, 0.0], "buttons": [0, 0]})
             # await asyncio.sleep(0.1)  # 100ms interval
             
