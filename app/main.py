@@ -10,7 +10,7 @@ data = 0
 ws_clients = {}
 
 # Camera IP
-cam1_IP = "10.83.37.101:554"
+cam1_IP = "192.168.0.101:554"
 # RTSP stream URL
 RTSP_URL = f"rtsp://admin:L206FE20@{cam1_IP}/cam/realmonitor?channel=1&subtype=0&proto=Onvif"
 # Global variable to signal shutdown
