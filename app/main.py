@@ -63,44 +63,44 @@ async def gamepad_websocket(websocket: WebSocket):
         print('here2')
         ws_clients.pop('ros')
 
-async def generate_frames(request: Request):
-    # Open the RTSP stream
-    cap = cv2.VideoCapture(RTSP_URL)
-    if not cap.isOpened():
-        raise Exception("Error: Could not open RTSP stream.")
+# async def generate_frames(request: Request):
+#     # Open the RTSP stream
+#     cap = cv2.VideoCapture(RTSP_URL)
+#     if not cap.isOpened():
+#         raise Exception("Error: Could not open RTSP stream.")
 
-    try:
-        while not shutdown_event.is_set():
-            # Check if the client is still connected
-            if await request.is_disconnected():
-                print("Client disconnected.")
-                break
+#     try:
+#         while not shutdown_event.is_set():
+#             # Check if the client is still connected
+#             if await request.is_disconnected():
+#                 print("Client disconnected.")
+#                 break
 
-            ret, frame = cap.read()
-            if not ret:
-                print("Error: Failed to read frame.")
-                break
+#             ret, frame = cap.read()
+#             if not ret:
+#                 print("Error: Failed to read frame.")
+#                 break
 
-            # Encode the frame as JPEG
-            _, buffer = cv2.imencode('.jpg', frame)
-            frame_bytes = buffer.tobytes()
+#             # Encode the frame as JPEG
+#             _, buffer = cv2.imencode('.jpg', frame)
+#             frame_bytes = buffer.tobytes()
 
-            # Yield the frame in MJPEG format
-            yield (b'--frame\r\n'
-                   b'Content-Type: image/jpeg\r\n\r\n' + frame_bytes + b'\r\n')
+#             # Yield the frame in MJPEG format
+#             yield (b'--frame\r\n'
+#                    b'Content-Type: image/jpeg\r\n\r\n' + frame_bytes + b'\r\n')
 
-            # Add a small delay to control the frame rate
-    finally:
-        # Release the VideoCapture object
-        cap.release()
-        print("RTSP stream released.")
+#             # Add a small delay to control the frame rate
+#     finally:
+#         # Release the VideoCapture object
+#         cap.release()
+#         print("RTSP stream released.")
 
-@app.get("/video_feed")
-async def video_feed(request: Request):
-    return StreamingResponse(
-        generate_frames(request),
-        media_type="multipart/x-mixed-replace; boundary=frame"
-    )
+# @app.get("/video_feed")
+# async def video_feed(request: Request):
+#     return StreamingResponse(
+#         generate_frames(request),
+#         media_type="multipart/x-mixed-replace; boundary=frame"
+#     )
 
 # Serve HTML page
 @app.get("/")
