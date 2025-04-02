@@ -18,7 +18,8 @@ function initTabs(){
     });
 }
 
-const ws = new WebSocket('ws://atvpi.local:8000/ws/gamepad');
+const ws = new WebSocket('ws://atvpi.local:8000/ws/laptop');
+
 let gamepadIndex = null;
 let intervalId = null;
 
@@ -28,6 +29,9 @@ window.addEventListener('gamepadconnected', (e) => {
     document.getElementById('gamepad-status').textContent = 
         `Gamepad Connected`;
     document.getElementById('gamepad-status').style.backgroundColor = "#b8f592";
+    // if (ws.readyState === WebSocket.OPEN) {
+    //     ws.send(ws.send(JSON.stringify({"ID":"laptop"})));
+    // }
     intervalId = setInterval(pollGamepad, 100);
 });
 
