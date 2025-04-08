@@ -58,49 +58,52 @@ async def gamepad_websocket(websocket: WebSocket):
     except Exception as e:
         print(f"Error in ros WebSocket: {e}")
     finally:
-        print('here1')
         await websocket.close()
-        print('here2')
         ws_clients.pop('ros')
 
-# async def generate_frames(request: Request):
-#     # Open the RTSP stream
-#     cap = cv2.VideoCapture(RTSP_URL)
-#     if not cap.isOpened():
-#         raise Exception("Error: Could not open RTSP stream.")
+# Global variable to store the latest frame
+latest_frame = None
+frame_lock = asyncio.Lock()
 
-#     try:
-#         while not shutdown_event.is_set():
-#             # Check if the client is still connected
-#             if await request.is_disconnected():
-#                 print("Client disconnected.")
-#                 break
+@app.websocket("/ws/thermal")
+async def websocket_receiver(websocket: WebSocket):
+    global latest_frame
+    await websocket.accept()
+    print("WebSocket connected")
+    
+    try:
+        while True:
+            # Receive binary data (JPEG image) from WebSocket
+            data = await websocket.receive_bytes()
+            
+            # Update the latest frame with thread-safe locking
+            async with frame_lock:
+                latest_frame = data
+                
+    except Exception as e:
+        print(f"WebSocket error: {e}")
+    finally:
+        async with frame_lock:
+            latest_frame = None
 
-#             ret, frame = cap.read()
-#             if not ret:
-#                 print("Error: Failed to read frame.")
-#                 break
+async def generate_frames():
+    global latest_frame
+    while True:
+        async with frame_lock:
+            if latest_frame is not None:
+                yield (b'--frame\r\n'
+                       b'Content-Type: image/jpeg\r\n\r\n' + 
+                       latest_frame + b'\r\n')
+        
+        # Small delay to prevent busy waiting
+        await asyncio.sleep(0.01)
 
-#             # Encode the frame as JPEG
-#             _, buffer = cv2.imencode('.jpg', frame)
-#             frame_bytes = buffer.tobytes()
-
-#             # Yield the frame in MJPEG format
-#             yield (b'--frame\r\n'
-#                    b'Content-Type: image/jpeg\r\n\r\n' + frame_bytes + b'\r\n')
-
-#             # Add a small delay to control the frame rate
-#     finally:
-#         # Release the VideoCapture object
-#         cap.release()
-#         print("RTSP stream released.")
-
-# @app.get("/video_feed")
-# async def video_feed(request: Request):
-#     return StreamingResponse(
-#         generate_frames(request),
-#         media_type="multipart/x-mixed-replace; boundary=frame"
-#     )
+@app.get("/thermal")
+async def thermal_stream():
+    return StreamingResponse(
+        generate_frames(),
+        media_type="multipart/x-mixed-replace; boundary=frame"
+    )
 
 # Serve HTML page
 @app.get("/")
