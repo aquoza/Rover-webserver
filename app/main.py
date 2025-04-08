@@ -75,7 +75,7 @@ async def websocket_receiver(websocket: WebSocket):
         while True:
             print(1)
             # Receive binary data (JPEG image) from WebSocket
-            data = await websocket.receive_bytes()
+            data = await websocket.receive()
             print(data)
             
             # Update the latest frame with thread-safe locking
