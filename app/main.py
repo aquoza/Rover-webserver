@@ -6,13 +6,8 @@ from contextlib import asynccontextmanager
 import asyncio
 import cv2
 
-data = 0
 ws_clients = {}
 
-# Camera IP
-cam1_IP = "192.168.0.101:554"
-# RTSP stream URL
-RTSP_URL = f"rtsp://admin:L206FE20@{cam1_IP}/cam/realmonitor?channel=1&subtype=0&proto=Onvif"
 # Global variable to signal shutdown
 shutdown_event = asyncio.Event()
 
@@ -73,10 +68,10 @@ async def websocket_receiver(websocket: WebSocket):
     
     try:
         while True:
-            print(1)
+            # print(1)
             # Receive binary data (JPEG image) from WebSocket
-            data = await websocket.receive()
-            print(data)
+            data = await websocket.receive_bytes()
+            # print(data)
             
             # Update the latest frame with thread-safe locking
             async with frame_lock:
@@ -84,9 +79,9 @@ async def websocket_receiver(websocket: WebSocket):
                 
     except Exception as e:
         print(f"WebSocket error: {e}")
-    finally:
-        async with frame_lock:
-            latest_frame = None
+    # finally:
+    #     async with frame_lock:
+    #         latest_frame = None
 
 async def generate_frames():
     global latest_frame

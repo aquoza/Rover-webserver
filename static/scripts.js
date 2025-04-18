@@ -18,7 +18,9 @@ function initTabs(){
     });
 }
 
-const ws = new WebSocket('ws://atvpi.local:8000/ws/laptop');
+const ip = '0.0.0.0:8000'
+
+const ws = new WebSocket('ws://'+ ip +'/ws/laptop');
 
 let gamepadIndex = null;
 let intervalId = null;
@@ -43,6 +45,35 @@ window.addEventListener('gamepaddisconnected', (e) => {
     gamepadIndex = null;
     clearInterval(intervalId); // Stop the interval
 });
+
+// Get the image element and status div
+const thermalImg = document.querySelector('img[src="http://0.0.0.0:8000/thermal"]');
+const thermalStatus = document.getElementById('thermal-status');
+
+if (thermalImg && thermalStatus) {
+    // Add event listeners for load and error events
+    thermalImg.addEventListener('load', function() {
+        thermalStatus.textContent = 'Thermal camera Connected';
+        thermalStatus.style.backgroundColor = '#b8f592'; // Reset to default or your connected color
+    });
+
+    thermalImg.addEventListener('error', function() {
+        thermalStatus.textContent = 'Thermal camera Not Connected';
+        thermalStatus.style.backgroundColor = '#FB8773';
+    });
+
+    // Check immediately in case the image is already loaded or errored
+    if (thermalImg.complete) {
+        if (thermalImg.naturalHeight === 0) {
+            // Image error
+            thermalStatus.textContent = 'Thermal camera Not Connected';
+            thermalStatus.style.backgroundColor = '#FB8773';
+        }
+    }
+} else {
+    console.error('Either thermal image or status element not found');
+}
+
 // Gamepad polling loop
 function pollGamepad() {
     isRunning = true;
