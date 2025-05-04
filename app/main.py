@@ -22,6 +22,11 @@ app = FastAPI(lifespan=lifespan)
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 
+# Serve HTML page
+@app.get("/")
+async def index(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
+
 @app.websocket("/ws/laptop")
 async def gamepad_websocket(websocket: WebSocket):
     await websocket.accept()
@@ -57,54 +62,51 @@ async def gamepad_websocket(websocket: WebSocket):
         ws_clients.pop('ros')
 
 # Global variable to store the latest frame
-latest_frame = None
-frame_lock = asyncio.Lock()
+# latest_frame = None
+# frame_lock = asyncio.Lock()
 
-@app.websocket("/ws/thermal")
-async def websocket_receiver(websocket: WebSocket):
-    global latest_frame
-    await websocket.accept()
-    print("WebSocket connected")
+# @app.websocket("/ws/thermal")
+# async def websocket_receiver(websocket: WebSocket):
+#     global latest_frame
+#     await websocket.accept()
+#     print("WebSocket connected")
     
-    try:
-        while True:
-            # print(1)
-            # Receive binary data (JPEG image) from WebSocket
-            data = await websocket.receive_bytes()
-            # print(data)
+#     try:
+#         while True:
+#             # print(1)
+#             # Receive binary data (JPEG image) from WebSocket
+#             data = await websocket.receive_bytes()
+#             # print(data)
             
-            # Update the latest frame with thread-safe locking
-            async with frame_lock:
-                latest_frame = data
+#             # Update the latest frame with thread-safe locking
+#             async with frame_lock:
+#                 latest_frame = data
                 
-    except Exception as e:
-        print(f"WebSocket error: {e}")
-    # finally:
-    #     async with frame_lock:
-    #         latest_frame = None
+#     except Exception as e:
+#         print(f"WebSocket error: {e}")
+#     # finally:
+#     #     async with frame_lock:
+#     #         latest_frame = None
 
-async def generate_frames():
-    global latest_frame
-    while True:
-        async with frame_lock:
-            if latest_frame is not None:
-                yield (b'--frame\r\n'
-                       b'Content-Type: image/jpeg\r\n\r\n' + 
-                       latest_frame + b'\r\n')
+# async def generate_frames():
+#     global latest_frame
+#     while True:
+#         async with frame_lock:
+#             if latest_frame is not None:
+#                 yield (b'--frame\r\n'
+#                        b'Content-Type: image/jpeg\r\n\r\n' + 
+#                        latest_frame + b'\r\n')
         
-        # Small delay to prevent busy waiting
-        await asyncio.sleep(0.01)
+#         # Small delay to prevent busy waiting
+#         await asyncio.sleep(0.01)
 
-@app.get("/thermal")
-async def thermal_stream():
-    return StreamingResponse(
-        generate_frames(),
-        media_type="multipart/x-mixed-replace; boundary=frame"
-    )
+# @app.get("/thermal")
+# async def thermal_stream():
+#     return StreamingResponse(
+#         generate_frames(),
+#         media_type="multipart/x-mixed-replace; boundary=frame"
+#     )
 
-# Serve HTML page
-@app.get("/")
-async def index(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request})
+
 
     
