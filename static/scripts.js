@@ -18,9 +18,7 @@ function initTabs(){
     });
 }
 
-const ip = '0.0.0.0:8000'
-
-const ws = new WebSocket('ws://'+ ip +'/ws/laptop');
+const ws = new WebSocket('ws://0.0.0.0:8000/ws/laptop');
 
 let gamepadIndex = null;
 let intervalId = null;
