@@ -22,10 +22,6 @@ app = FastAPI(lifespan=lifespan)
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 
-# Serve HTML page
-@app.get("/")
-async def index(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request})
 
 @app.websocket("/ws/laptop")
 async def gamepad_websocket(websocket: WebSocket):
@@ -60,6 +56,11 @@ async def gamepad_websocket(websocket: WebSocket):
     finally:
         await websocket.close()
         ws_clients.pop('ros')
+
+# Serve HTML page
+@app.get("/")
+async def index(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
 
 # Global variable to store the latest frame
 # latest_frame = None
