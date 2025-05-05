@@ -33,7 +33,7 @@ async def gamepad_websocket(websocket: WebSocket):
             data = await websocket.receive_json() 
             if 'ros' in ws_clients :
                 await ws_clients['ros'].send_json(data)
-            # print(data)  # Process this data as needed
+            print(data)  # Process this data as needed
             
     except Exception as e:
         print(f"Error in laptop WebSocket: {e}")

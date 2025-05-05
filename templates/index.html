@@ -2,18 +2,15 @@
 <html>
 
 <head>
-<!--    <link href="https://fonts.googleapis.com/css?family=Sansation&display=swap" rel="stylesheet" />-->
     <link href="../static/styles.css" rel="stylesheet" />
     <link rel="icon" type="image/x-icon" href="../static//images/favicon.ico">
     <title>Dashboard</title>
-    <!-- <link rel="stylesheet" href="../static/scripts.js"> -->
 </head>
 
 <body>
     <div class = "top">
         <div>
             <span style="font-size: 38.26pt;">Dashboard </span>
-            <!-- <span style="font-size: 11pt;">192.168.0.1</span> -->
         </div>
         <span>Help</span>
     </div>
@@ -25,17 +22,17 @@
                 <div class="status gamepad" id="gamepad-status">
                     Gamepad not found
                 </div>
-                <div class="status thermal-camera" id ="thermal-status">
+                <!-- <div class="status thermal-camera" id ="thermal-status">
                     Thermal camera not found
                 </div>
             </div>
             <div class="status1">
-                <div class="status drone">
+                <div class="status drone",id ="drone-status">
                     Drone not found
                 </div>
                 <div class="status arm">
                     Arm not found
-                </div>
+                </div> -->
             </div>
             <div class = "mode">
                 <span style="    position: absolute;
@@ -65,15 +62,14 @@
             </div>
         
             <div id="tab1" class = "tab-content active">
-                <!-- <img src="http://0.0.0.0:8000/thermal"> -->
-        
+                Go <a href="http://atvpi.local:8090/" target="_blank" rel="noopener noreferrer">here</a> for rover feed.
             </div>
+
             <div id="tab2" class = "tab-content">
-                <h1>Tab2 content</h1>
+                <video id="webcam" width="640" height="480" autoplay></video>
             </div>
+
             <div id="tab3" class = "tab-content">
-                <h1>Tab3 content</h1>
-                lorem ipsum
             </div>
         </div>
     </div>

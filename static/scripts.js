@@ -45,33 +45,33 @@ window.addEventListener('gamepaddisconnected', (e) => {
     clearInterval(intervalId); // Stop the interval
 });
 
-// Get the image element and status div
-const thermalImg = document.querySelector('img[src="http://0.0.0.0:8000/thermal"]');
-const thermalStatus = document.getElementById('thermal-status');
+// // Get the image element and status div
+// const thermalImg = document.querySelector('img[src="http://0.0.0.0:8000/thermal"]');
+// const thermalStatus = document.getElementById('thermal-status');
 
-if (thermalImg && thermalStatus) {
-    // Add event listeners for load and error events
-    thermalImg.addEventListener('load', function() {
-        thermalStatus.textContent = 'Thermal camera Connected';
-        thermalStatus.style.backgroundColor = '#b8f592'; // Reset to default or your connected color
-    });
+// if (thermalImg && thermalStatus) {
+//     // Add event listeners for load and error events
+//     thermalImg.addEventListener('load', function() {
+//         thermalStatus.textContent = 'Thermal camera Connected';
+//         thermalStatus.style.backgroundColor = '#b8f592'; // Reset to default or your connected color
+//     });
 
-    thermalImg.addEventListener('error', function() {
-        thermalStatus.textContent = 'Thermal camera Not Connected';
-        thermalStatus.style.backgroundColor = '#FB8773';
-    });
+//     thermalImg.addEventListener('error', function() {
+//         thermalStatus.textContent = 'Thermal camera Not Connected';
+//         thermalStatus.style.backgroundColor = '#FB8773';
+//     });
 
-    // Check immediately in case the image is already loaded or errored
-    if (thermalImg.complete) {
-        if (thermalImg.naturalHeight === 0) {
-            // Image error
-            thermalStatus.textContent = 'Thermal camera Not Connected';
-            thermalStatus.style.backgroundColor = '#FB8773';
-        }
-    }
-} else {
-    console.error('Either thermal image or status element not found');
-}
+//     // Check immediately in case the image is already loaded or errored
+//     if (thermalImg.complete) {
+//         if (thermalImg.naturalHeight === 0) {
+//             // Image error
+//             thermalStatus.textContent = 'Thermal camera Not Connected';
+//             thermalStatus.style.backgroundColor = '#FB8773';
+//         }
+//     }
+// } else {
+//     console.error('Either thermal image or status element not found');
+// }
 
 // Gamepad polling loop
 function pollGamepad() {
@@ -92,6 +92,22 @@ function pollGamepad() {
         }
     }
     
+}
+
+const video = document.getElementById('webcam');
+        
+if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+    navigator.mediaDevices.getUserMedia({ video: true })
+        .then(stream => {
+            video.srcObject = stream;
+        })
+        .catch(error => {
+            console.error("Could not access the webcam: ", error);
+        });
+        document.getElementById('drone-status').textContent = `Drone Connected`;
+        document.getElementById('drone-status').style.backgroundColor = "#b8f592";
+} else {
+    alert("Your browser doesn't support accessing the webcam.");
 }
 
 // WebSocket connection handlers
