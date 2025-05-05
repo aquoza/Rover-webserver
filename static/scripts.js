@@ -13,7 +13,6 @@ function initTabs(){
 
             content.classList.add("active");
             this.classList.add("active");
-
         });
     });
 }
@@ -34,6 +33,7 @@ window.addEventListener('gamepadconnected', (e) => {
     //     ws.send(ws.send(JSON.stringify({"ID":"laptop"})));
     // }
     intervalId = setInterval(pollGamepad, 100);
+    setInterval(updateGamepad, 50);
 });
 
 // Gamepad disconnection handler
@@ -45,33 +45,76 @@ window.addEventListener('gamepaddisconnected', (e) => {
     clearInterval(intervalId); // Stop the interval
 });
 
-// // Get the image element and status div
-// const thermalImg = document.querySelector('img[src="http://0.0.0.0:8000/thermal"]');
-// const thermalStatus = document.getElementById('thermal-status');
+// Initial states
+let roverState = 'Ackermann'; // Can be 'Ackerman' or 'On-spot'
+let armState = 'Node0';
+let nodeValue = 0;
+let button0Pressed = false;
+let button1Pressed = false;
+let button2Pressed = false;
+let button3Pressed = false;
 
-// if (thermalImg && thermalStatus) {
-//     // Add event listeners for load and error events
-//     thermalImg.addEventListener('load', function() {
-//         thermalStatus.textContent = 'Thermal camera Connected';
-//         thermalStatus.style.backgroundColor = '#b8f592'; // Reset to default or your connected color
-//     });
+// Get the div element
+const modeValueDiv = document.querySelector('.mode_value');
 
-//     thermalImg.addEventListener('error', function() {
-//         thermalStatus.textContent = 'Thermal camera Not Connected';
-//         thermalStatus.style.backgroundColor = '#FB8773';
-//     });
+function updateGamepad() {
+    // Get the first gamepad
+    const gamepads = navigator.getGamepads();
+    const gamepad = gamepads[0];
+    
+    if (!gamepad) return;
 
-//     // Check immediately in case the image is already loaded or errored
-//     if (thermalImg.complete) {
-//         if (thermalImg.naturalHeight === 0) {
-//             // Image error
-//             thermalStatus.textContent = 'Thermal camera Not Connected';
-//             thermalStatus.style.backgroundColor = '#FB8773';
-//         }
-//     }
-// } else {
-//     console.error('Either thermal image or status element not found');
-// }
+    // Button 0 - Toggle between Rover:Ackerman and Rover:On-spot
+    if (gamepad.buttons[0].pressed) {
+        if (!button0Pressed) {
+            roverState = roverState === 'Ackermann' ? 'On-spot' : 'Ackermann';
+            modeValueDiv.textContent = `Rover:${roverState}`;
+            button0Pressed = true;
+        }
+    } else {
+        button0Pressed = false;
+    }
+
+    // Button 1 - Set to Arm:Node0
+    if (gamepad.buttons[1].pressed) {
+        if (!button1Pressed) {
+            armState = 'Node0';
+            nodeValue = 0;
+            modeValueDiv.textContent = `Arm:${armState}`;
+            button1Pressed = true;
+        }
+    } else {
+        button1Pressed = false;
+    }
+
+    // Button 2 - Increment node value (max 2)
+    if (gamepad.buttons[5].pressed) {
+        if (!button2Pressed) {
+            if (nodeValue < 2) {
+                nodeValue++;
+                armState = `Node${nodeValue}`;
+                modeValueDiv.textContent = `Arm:${armState}`;
+            }
+            button2Pressed = true;
+        }
+    } else {
+        button2Pressed = false;
+    }
+
+    // Button 3 - Decrement node value (min 0)
+    if (gamepad.buttons[4].pressed) {
+        if (!button3Pressed) {
+            if (nodeValue > 0) {
+                nodeValue--;
+                armState = `Node${nodeValue}`;
+                modeValueDiv.textContent = `Arm:${armState}`;
+            }
+            button3Pressed = true;
+        }
+    } else {
+        button3Pressed = false;
+    }
+}
 
 // Gamepad polling loop
 function pollGamepad() {
