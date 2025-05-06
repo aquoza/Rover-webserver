@@ -49,6 +49,7 @@ window.addEventListener('gamepaddisconnected', (e) => {
 let roverState = 'Ackermann'; // Can be 'Ackerman' or 'On-spot'
 let armState = 'Node0';
 let nodeValue = 0;
+let flag = 0;
 let button0Pressed = false;
 let button1Pressed = false;
 let button2Pressed = false;
@@ -65,7 +66,7 @@ function updateGamepad() {
     if (!gamepad) return;
 
     // Button 0 - Toggle between Rover:Ackerman and Rover:On-spot
-    if (gamepad.buttons[0].pressed) {
+    if (gamepad.buttons[1].pressed) {
         if (!button0Pressed) {
             roverState = roverState === 'Ackermann' ? 'On-spot' : 'Ackermann';
             modeValueDiv.textContent = `Rover:${roverState}`;
@@ -76,13 +77,22 @@ function updateGamepad() {
     }
 
     // Button 1 - Set to Arm:Node0
-    if (gamepad.buttons[1].pressed) {
-        if (!button1Pressed) {
+    if (gamepad.buttons[3].pressed) {
+        if (!button1Pressed && flag == 1) {
             armState = 'Node0';
             nodeValue = 0;
             modeValueDiv.textContent = `Arm:${armState}`;
             button1Pressed = true;
+            flag = 0;
         }
+        else if (!button1Pressed && flag == 0){
+            armState = 'Node0';
+            nodeValue = 0;
+            modeValueDiv.textContent = `Rover:${roverState}`;
+            button1Pressed = true;
+            flag = 1;
+        }
+    
     } else {
         button1Pressed = false;
     }
