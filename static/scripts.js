@@ -32,7 +32,7 @@ window.addEventListener('gamepadconnected', (e) => {
     // if (ws.readyState === WebSocket.OPEN) {
     //     ws.send(ws.send(JSON.stringify({"ID":"laptop"})));
     // }
-    intervalId = setInterval(pollGamepad, 100);
+    intervalId = setInterval(pollGamepad, 50);
     setInterval(updateGamepad, 50);
 });
 
