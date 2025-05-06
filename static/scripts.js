@@ -18,7 +18,7 @@ function initTabs(){
 }
 
 
-const ws = new WebSocket('ws://atvpi.local:8000/ws/laptop');
+const ws = new WebSocket('ws://192.168.0.100:8000/ws/laptop');
 
 let gamepadIndex = null;
 let intervalId = null;
